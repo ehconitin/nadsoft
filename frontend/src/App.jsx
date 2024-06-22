@@ -12,15 +12,9 @@ function App() {
 
   return (
     <div className="container p-5">
-      <h2 className="text-xl">All Members</h2>
       <div className="d-flex justify-content-between align-items-center mb-4 w-100">
         <div className="d-flex justify-content-between align-items-center w-100">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="form-control me-2"
-            style={{ height: "40px", width: "300px" }}
-          />
+          <div></div>
           <button
             className="btn btn-primary"
             style={{ height: "40px", minWidth: "150px" }}

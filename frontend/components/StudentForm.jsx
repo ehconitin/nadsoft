@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import apiService from "../actions/apiService";
 import { formatDate } from "../utils/formatDate";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
   const [formData, setFormData] = useState({
@@ -40,15 +43,45 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
 
     try {
       if (student) {
-        await apiService.updateStudent(student.student_id, studentData);
+        MySwal.fire({
+          title: "Update Student",
+          text: "Are you sure you want to update this student?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, update it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await apiService.updateStudent(student.student_id, studentData);
+            handleClose();
+            MySwal.fire(
+              "Updated!",
+              "Student details have been updated.",
+              "success"
+            );
+          }
+        });
       } else {
-        await apiService.createStudent(studentData);
+        MySwal.fire({
+          title: "Create Student",
+          text: "Are you sure you want to create this student?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, create it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await apiService.createStudent(studentData);
+            handleClose();
+            MySwal.fire("Created!", "New student has been added.", "success");
+          }
+        });
       }
-
-      handleClose();
-      window.location.reload();
     } catch (error) {
       console.error("Error submitting student data:", error);
+      MySwal.fire("Error!", "Failed to submit student data.", "error");
     }
   };
 

@@ -4,6 +4,9 @@ import apiService from "../actions/apiService";
 import { BiBookContent, BiEdit, BiTrash } from "react-icons/bi";
 import MarksForm from "./MarksForm";
 import StudentForm from "./StudentForm";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -42,15 +45,27 @@ const StudentList = () => {
   };
 
   const handleDeleteStudent = async (studentId) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
-      try {
-        const deletedStudent = await apiService.deleteStudent(studentId);
-        console.log("Deleted student:", deletedStudent);
-        setRefresh(!refresh);
-      } catch (error) {
-        console.error("Error deleting student:", error);
+    MySwal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this student!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const deletedStudent = await apiService.deleteStudent(studentId);
+          console.log("Deleted student:", deletedStudent);
+          setRefresh(!refresh);
+          MySwal.fire("Deleted!", "The student has been deleted.", "success");
+        } catch (error) {
+          console.error("Error deleting student:", error);
+          MySwal.fire("Error!", "Failed to delete the student.", "error");
+        }
       }
-    }
+    });
   };
 
   const handleShowMarks = async (studentId) => {
@@ -86,15 +101,26 @@ const StudentList = () => {
   };
 
   const handleDeleteMarks = async (markId) => {
-    if (window.confirm("Are you sure you want to delete this mark?")) {
-      try {
-        await apiService.deleteMark(markId);
-
-        handleShowMarks(selectedStudent.student_id);
-      } catch (error) {
-        console.error("Error deleting mark:", error);
+    MySwal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this mark!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiService.deleteMark(markId);
+          handleShowMarks(selectedStudent.student_id);
+          MySwal.fire("Deleted!", "The mark has been deleted.", "success");
+        } catch (error) {
+          console.error("Error deleting mark:", error);
+          MySwal.fire("Error!", "Failed to delete the mark.", "error");
+        }
       }
-    }
+    });
   };
 
   const refreshStudents = () => {

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import apiService from "../actions/apiService";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const MarksForm = ({ show, handleClose, studentId, refreshMarks, marks }) => {
   const [formData, setFormData] = useState({
@@ -35,20 +38,57 @@ const MarksForm = ({ show, handleClose, studentId, refreshMarks, marks }) => {
 
     try {
       if (marks) {
-        await apiService.updateMark(marks.mark_id, markData);
+        MySwal.fire({
+          title: "Update Marks",
+          text: "Are you sure you want to update this marks?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, update it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await apiService.updateMark(marks.mark_id, markData);
+            refreshMarks();
+            setFormData({
+              subject: "",
+              mark: "",
+              examDate: "",
+            });
+            handleClose();
+            MySwal.fire(
+              "Updated!",
+              "Marks details have been updated.",
+              "success"
+            );
+          }
+        });
       } else {
-        await apiService.addMark(markData);
+        MySwal.fire({
+          title: "Add Marks",
+          text: "Are you sure you want to add this marks?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, add it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await apiService.addMark(markData);
+            refreshMarks();
+            setFormData({
+              subject: "",
+              mark: "",
+              examDate: "",
+            });
+            handleClose();
+            MySwal.fire("Added!", "New marks has been added.", "success");
+          }
+        });
       }
-
-      refreshMarks();
-      setFormData({
-        subject: "",
-        mark: "",
-        examDate: "",
-      });
-      handleClose();
     } catch (error) {
-      console.error("Error adding mark:", error);
+      console.error("Error submitting marks data:", error);
+      MySwal.fire("Error!", "Failed to submit marks data.", "error");
     }
   };
 
