@@ -65,7 +65,9 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
               "Updated!",
               "Student details have been updated.",
               "success"
-            );
+            ).then(() => {
+              window.location.reload(); // Reload page after update
+            });
           }
         });
       } else {
@@ -87,7 +89,13 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
               dateOfBirth: "",
               email: "",
             });
-            MySwal.fire("Created!", "New student has been added.", "success");
+            MySwal.fire(
+              "Created!",
+              "New student has been added.",
+              "success"
+            ).then(() => {
+              window.location.reload(); // Reload page after creation
+            });
           }
         });
       }
