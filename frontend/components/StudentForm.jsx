@@ -55,6 +55,12 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
           if (result.isConfirmed) {
             await apiService.updateStudent(student.student_id, studentData);
             handleClose();
+            setFormData({
+              firstName: "",
+              lastName: "",
+              dateOfBirth: "",
+              email: "",
+            });
             MySwal.fire(
               "Updated!",
               "Student details have been updated.",
@@ -75,6 +81,12 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
           if (result.isConfirmed) {
             await apiService.createStudent(studentData);
             handleClose();
+            setFormData({
+              firstName: "",
+              lastName: "",
+              dateOfBirth: "",
+              email: "",
+            });
             MySwal.fire("Created!", "New student has been added.", "success");
           }
         });
@@ -88,7 +100,9 @@ const StudentForm = ({ show, handleClose, student, refreshStudents }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{student ? "Edit Student" : "Add Student"}</Modal.Title>
+        <Modal.Title>
+          {student ? "Update Student Details" : "Add Student"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>

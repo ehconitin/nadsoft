@@ -39,8 +39,8 @@ const MarksForm = ({ show, handleClose, studentId, refreshMarks, marks }) => {
     try {
       if (marks) {
         MySwal.fire({
-          title: "Update Marks",
-          text: "Are you sure you want to update this marks?",
+          title: "Update Mark",
+          text: "Are you sure you want to update this mark?",
           icon: "question",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -58,15 +58,15 @@ const MarksForm = ({ show, handleClose, studentId, refreshMarks, marks }) => {
             handleClose();
             MySwal.fire(
               "Updated!",
-              "Marks details have been updated.",
+              "Mark details have been updated.",
               "success"
             );
           }
         });
       } else {
         MySwal.fire({
-          title: "Add Marks",
-          text: "Are you sure you want to add this marks?",
+          title: "Add Mark",
+          text: "Are you sure you want to add this mark?",
           icon: "question",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -82,13 +82,13 @@ const MarksForm = ({ show, handleClose, studentId, refreshMarks, marks }) => {
               examDate: "",
             });
             handleClose();
-            MySwal.fire("Added!", "New marks has been added.", "success");
+            MySwal.fire("Added!", "New mark has been added.", "success");
           }
         });
       }
     } catch (error) {
-      console.error("Error submitting marks data:", error);
-      MySwal.fire("Error!", "Failed to submit marks data.", "error");
+      console.error("Error submitting mark data:", error);
+      MySwal.fire("Error!", "Failed to submit mark data.", "error");
     }
   };
 
